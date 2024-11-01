@@ -25,32 +25,32 @@ export class UnsplashAPI {
       this.#searghParams
     }`;
 
-    return await fetch(url)
-      .then(resp => {
-        if (!resp.ok) throw new Error(resp.status);
-        return resp.json();
-      })
-      .catch(err => console.log(err));
+    // return await fetch(url)
+    //   .then(resp => {
+    //     if (!resp.ok) throw new Error(resp.status);
+    //     return resp.json();
+    //   })
+    //   .catch(err => console.log(err));
 
     // через axios і try/catch
-    // try {
-    //   const resp = await axios.get(url);
-    //   return resp.data;
-    // } catch (error) {
-    //   console.log(error.message);
-    // }
+    try {
+      const resp = await axios.get(url);
+      return resp.data;
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   // 2. Створюємо метод для відображення зображень по пошуку
   async getSearchImages(page) {
-    // const url = `${this.#BASE_URL}?page=${page}&query=${
-    //   this.#query
-    // }&per_page=9&orientation=portrait&client_id=${this.#API_KEY}`;
+    const url = `${this.#BASE_URL}?page=${page}&query=${
+      this.#query
+    }&per_page=9&orientation=portrait&client_id=${this.#API_KEY}`;
 
     // скорочуємо запит на бек завдяки URLSearchParams
-    const url = `${this.#BASE_URL}?page=${page}&query=${this.#query}&${
-      this.#searghParams
-    }`;
+    // const url = `${this.#BASE_URL}?page=${page}&query=${this.#query}&${
+    //   this.#searghParams
+    // }`;
 
     return await fetch(url)
       .then(resp => {

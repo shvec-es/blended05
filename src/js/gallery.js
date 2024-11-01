@@ -10,7 +10,7 @@ const service = new UnsplashAPI();
 
 // 1.5. Отримуємо посилання на потрібні елементи
 const container = document.getElementById('tui-pagination-container');
-const galleryEl = document.querySelector('.js-gallery');
+const galleryEl = document.querySelector('.gallery');
 const formEl = document.querySelector('.js-search-form');
 
 // 1.5.Створюємо об'єкт налаштувань з бібліотеки
@@ -20,23 +20,23 @@ const options = {
   visiblePages: 5,
   page: 1,
   //3. Додаємо кастомні стилі на пагінацію через css
-  template: {
-    page: '<a href="#" class="tui-page-btn tui-custom-btn">{{page}}</a>',
-    currentPage:
-      '<strong class="tui-page-btn tui-is-selected tui-custom-btn">{{page}}</strong>',
-    moveButton:
-      '<a href="#" class="tui-page-btn tui-{{type}}">' +
-      '<span class="tui-ico-{{type}}">{{type}}</span>' +
-      '</a>',
-    disabledMoveButton:
-      '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
-      '<span class="tui-ico-{{type}}">{{type}}</span>' +
-      '</span>',
-    moreButton:
-      '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
-      '<span class="tui-ico-ellip">...</span>' +
-      '</a>',
-  },
+  // template: {
+  //   page: '<a href="#" class="tui-page-btn tui-custom-btn">{{page}}</a>',
+  //   currentPage:
+  //     '<strong class="tui-page-btn tui-is-selected tui-custom-btn">{{page}}</strong>',
+  //   moveButton:
+  //     '<a href="#" class="tui-page-btn tui-{{type}}">' +
+  //     '<span class="tui-ico-{{type}}">{{type}}</span>' +
+  //     '</a>',
+  //   disabledMoveButton:
+  //     '<span class="tui-page-btn tui-is-disabled tui-{{type}}">' +
+  //     '<span class="tui-ico-{{type}}">{{type}}</span>' +
+  //     '</span>',
+  //   moreButton:
+  //     '<a href="#" class="tui-page-btn tui-{{type}}-is-ellip">' +
+  //     '<span class="tui-ico-ellip">...</span>' +
+  //     '</a>',
+  // },
 };
 
 // 1.5. Додаємо пагінацію і отримуємо page, щоб додавати у запит
@@ -44,30 +44,32 @@ const paginetion = new Pagination(container, options);
 const page = paginetion.getCurrentPage();
 
 // 1.4. Робимо запит за популярними зображеннями
-service
-  .getPopularImages(page)
-  .then(({ total, results }) => {
-    paginetion.reset(total);
-    // 1.6. Створюємо функцію для відображення зображень на сторінці (в окремому файлі)
-    const markup = createGalleryCard(results);
-    galleryEl.insertAdjacentHTML('afterbegin', markup);
-  })
-  .catch(() => Notify.failure('Something wrong'));
-
-// через axios і try/catch
-// async function loadData() {
-//   try {
-//     const data = await service.getPopularImages(page);
-//     const { total, results } = data;
+// service
+//   .getPopularImages(page)
+//   .then(({ total, results }) => {
 //     paginetion.reset(total);
 //     // 1.6. Створюємо функцію для відображення зображень на сторінці (в окремому файлі)
 //     const markup = createGalleryCard(results);
 //     galleryEl.insertAdjacentHTML('afterbegin', markup);
-//   } catch (err) {
-//     Notify.failure('Something wrong');
-//   }
-// }
-// loadData();
+//     lightbox.refresh();
+//   })
+//   .catch(() => Notify.failure('Something wrong'));
+
+// через axios і try/catch
+async function loadData() {
+  try {
+    const data = await service.getPopularImages(page);
+    const { total, results } = data;
+    paginetion.reset(total);
+    // 1.6. Створюємо функцію для відображення зображень на сторінці (в окремому файлі)
+    const markup = createGalleryCard(results);
+    galleryEl.insertAdjacentHTML('afterbegin', markup);
+  } catch (err) {
+    console.log(err);
+    Notify.failure('Something wrong');
+  }
+}
+loadData();
 
 // 1.7. Активуємо додавання нових сторінок при переході по пагінації
 const popular = event => {

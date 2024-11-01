@@ -2,7 +2,7 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 // https://www.npmjs.com/package/uuid
 import { v4 as uuidv4 } from 'uuid';
-
+import throttle from 'lodash.throttle';
 import { refs } from './refs';
 import storage from './storage';
 
@@ -12,8 +12,8 @@ const LOCAL_KEY = 'todo-message';
 let todo = {};
 
 // 3. Додаємо слухачів подій (на зміну введених данних, щоб зберігти ці данні, і сабміт для відправки даних)
-refs.formRef.addEventListener('input', onSaveTodo);
-refs.formRef.addEventListener('submit', onSubmit);
+refs.todoForm.addEventListener('input', throttle(onSaveTodo, 1500));
+refs.todoForm.addEventListener('submit', onSubmit);
 
 function onSaveTodo(e) {
   const { name, value } = e.target;
@@ -33,7 +33,7 @@ function onSubmit(e) {
   }
   // 5.1. Додаємо дані з об'єкту туду у розмітку
   const markup = `<li>Todo: ${text}, priority: ${priority} <button type="button" class="todo__delete" id=${uuidv4()}></button></li>`;
-  refs.listRef.insertAdjacentHTML('beforeend', markup);
+  refs.todoList.insertAdjacentHTML('beforeend', markup);
   Notify.success('Note added successfuly');
 
   // 7. Додаємо можливість видалити туду
@@ -41,7 +41,7 @@ function onSubmit(e) {
   deleteBtns.forEach(btn => btn.addEventListener('click', deleteTodo));
 
   // 6. Очищуємо локалсторадж, форму, об'єкт
-  refs.formRef.reset();
+  refs.todoForm.reset();
   storage.remove(LOCAL_KEY);
   Object.keys(todo).forEach(key => (todo[key] = ''));
 }
@@ -53,7 +53,7 @@ function initTodo() {
   const savedTodo = storage.load(LOCAL_KEY);
   if (savedTodo) {
     for (let key in savedTodo) {
-      refs.formRef[key].value = savedTodo[key];
+      refs.todoForm[key].value = savedTodo[key];
       todo[key] = savedTodo[key];
     }
   }
@@ -66,7 +66,7 @@ function deleteTodo(e) {
   // );
   // refs.listRef.innerHTML = '';
   // refs.listRef.append(...filteredList);
-  const deletedItem = [...refs.listRef.children].find(
+  const deletedItem = [...refs.todoList.children].find(
     item => e.target.id === item.lastChild.id
   );
   deletedItem.remove();

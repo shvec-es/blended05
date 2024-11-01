@@ -1,0 +1,107 @@
+.login-form {
+  width: 300px;
+  margin: 0 auto 50px;
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+}
+
+.login-input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #8bc34a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background-color: #689f38;
+}
+
+.login-btn:active {
+  background-color: #3e8e41;
+}
+
+// 3
+
+.checkbox-thumb {
+  position: relative;
+  width: 50px;
+  height: 16px;
+
+  overflow: hidden;
+
+  border: 1px solid red;
+  border-radius: 15px;
+}
+
+.checkbox {
+  appearance: none;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.checkbox-circle {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translate(0, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: orange;
+  border-radius: 50%;
+
+  transition: 350ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.checkbox:checked ~ .checkbox-circle {
+  transform: translate(30px, -50%);
+}
+
+body.light {
+  background-color: aqua;
+}
+
+body.dark {
+  background-color: grey;
+}
+
+body.light .title {
+  background-color: red;
+  color: white;
+}
+
+body.light .text {
+  background-color: red;
+  color: white;
+}
+
+body.dark .title {
+  background-color: white;
+  color: black;
+}
+
+body.dark .text {
+  background-color: white;
+  color: black;
+}
